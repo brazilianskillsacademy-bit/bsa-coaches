@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#161f1b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BSA Coaches">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BSA Coaches</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="hello" id="hello">Hello, coach</div>
+    <h1>BSA COACHES</h1>
+    <p>Everything you need for your session, in one place</p>
+  </div>
+</header>
+
+<main>
+  <div class="section">Sessions</div>
+  <a class="tile" href="attendance.html">
+    <span class="ico">📋<span class="n">1</span></span>
+    <span class="txt">
+      <span class="t">Attendance</span>
+      <span class="d">Live attendance and visitors sheet for your venue</span>
+    </span>
+    <span class="chev">›</span>
+  </a>
+
+  <div class="section">Coming next</div>
+  <div class="tile off" aria-disabled="true">
+    <span class="ico">✅<span class="n">2</span></span>
+    <span class="txt">
+      <span class="t">Roll call <span class="tag">SOON</span></span>
+      <span class="d">Tick the names at the session, straight into the sheet</span>
+    </span>
+  </div>
+  <div class="tile off" aria-disabled="true">
+    <span class="ico">🏅<span class="n">3</span></span>
+    <span class="txt">
+      <span class="t">Assessments <span class="tag">SOON</span></span>
+      <span class="d">Player assessment forms per group</span>
+    </span>
+  </div>
+</main>
+
+<footer>Brazilian Skills Academy · Cape Town</footer>
+
+<script>
+  (function () {
+    var h = new Date().getHours();
+    document.getElementById('hello').textContent =
+      (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', coach';
+  })();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+</script>
+</body>
+</html>
