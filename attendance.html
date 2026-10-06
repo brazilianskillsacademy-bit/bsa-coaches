@@ -147,7 +147,7 @@
 
   $('lockForm').addEventListener('submit', function (ev) {
     ev.preventDefault();
-    var pw = $('pw').value.trim().toLowerCase();
+    var pw = $('pw').value.replace(/\s+/g, '').toLowerCase();
     if (pw) tryPassword(pw, true);
   });
   $('forget').addEventListener('click', function () { store(false, null); lock(''); $('pw').value = ''; });

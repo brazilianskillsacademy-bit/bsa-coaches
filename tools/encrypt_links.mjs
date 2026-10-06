@@ -15,7 +15,7 @@ const ITER = 600000;
 const enc = new TextEncoder();
 const b64 = (u8) => Buffer.from(u8).toString('base64');
 
-const password = readFileSync(join(SECRETS, 'coach_app_password.txt'), 'utf8').trim().toLowerCase();
+const password = readFileSync(join(SECRETS, 'coach_app_password.txt'), 'utf8').replace(/\s+/g, '').toLowerCase();
 
 async function key(salt, usage) {
   const base = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
