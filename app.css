@@ -1,3 +1,20 @@
+/* Self-hosted (OFL, licences in fonts/) so no coach's IP address goes to Google.
+   Latin subset; Inter is one variable file covering 400 to 700. */
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/anton-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/inter-latin.woff2') format('woff2');
+}
+
 :root {
   --bg: #f5f5f2;
   --ink: #1b201e;
