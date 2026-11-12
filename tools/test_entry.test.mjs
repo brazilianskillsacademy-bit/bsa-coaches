@@ -56,3 +56,35 @@ test('BSAEntry.pick keeps only an https link and show un-hides the tile only wit
   assert.equal(off.label.hidden, true);
   assert.equal(off.tile.onclick, null);
 });
+
+// The tile's own markup: the button carrying data-entry and the label it names.
+function entryMarkup(html) {
+  const tiles = [...html.matchAll(/<button\b[^>]*\sdata-entry="[^"]*"[^>]*>[\s\S]*?<\/button>/g)].map((m) => m[0]);
+  const labels = tiles.map((t) => {
+    const id = /\sdata-entry-label="([^"]+)"/.exec(t)[1];
+    return new RegExp(`<[a-z]+\\b[^>]*\\sid="${id}"[^>]*>[\\s\\S]*?</[a-z]+>`).exec(html)[0];
+  });
+  return { tiles, labels };
+}
+
+test('attendance.html carries one hidden entry tile and the six sheet buttons of today', () => {
+  const html = read('attendance.html');
+  assert.equal((html.match(/\sdata-entry="/g) || []).length, 1);
+  const { tiles: [tile], labels: [label] } = entryMarkup(html);
+  assert.match(tile, /\sdata-entry="entry_arenax"/);
+  assert.match(tile, /^<button\b[^>]*\shidden[\s>]/);
+  assert.match(label, /^<[a-z]+\b[^>]*\shidden[\s>]/);
+  assert.match(label, /class="section"/);
+  assert.doesNotMatch(tile, /data-key/);
+  assert.match(label, />Arena X coaches</);
+  assert.match(tile, /<span class="t">Attendance entry<\/span>/);
+  assert.match(tile, /<span class="d">Arena X: enter who came, after your session<\/span>/);
+  assert.doesNotMatch(tile, /class="n"/);
+  const venues = html.indexOf('<section id="venues"');
+  assert.ok(venues < html.indexOf(label) && html.indexOf(tile) < html.indexOf('<div class="section">Skills</div>'));
+  const entryJs = html.indexOf('<script src="entry.js"></script>');
+  assert.ok(html.indexOf('<script src="crypto.js"></script>') < entryJs && entryJs < html.indexOf('<script>\n'));
+  assert.match(html, /BSAEntry\.show\(document, links, window\.open\)/);
+  assert.deepEqual([...html.matchAll(/\sdata-key="([^"]+)"/g)].map((m) => m[1]),
+    ['sunningdale', 'tafelberg', 'arenax', 'fgm', 'hp', 'kids']);
+});
