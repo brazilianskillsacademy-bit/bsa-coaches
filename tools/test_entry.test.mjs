@@ -4,7 +4,7 @@
 //   node --test
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
@@ -87,4 +87,12 @@ test('attendance.html carries one hidden entry tile and the six sheet buttons of
   assert.match(html, /BSAEntry\.show\(document, links, window\.open\)/);
   assert.deepEqual([...html.matchAll(/\sdata-key="([^"]+)"/g)].map((m) => m[1]),
     ['sunningdale', 'tafelberg', 'arenax', 'fgm', 'hp', 'kids']);
+});
+
+test('the service worker caches entry.js under a new cache name', () => {
+  const sw = read('sw.js');
+  const shell = [.../const SHELL = \[([^\]]*)\]/.exec(sw)[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  assert.ok(shell.includes('entry.js'), 'entry.js not in SHELL');
+  for (const f of shell) if (f !== './') assert.ok(existsSync(join(ROOT, f)), `${f} missing`);
+  assert.match(sw, /const CACHE = 'bsa-coaches-v4';/);
 });
