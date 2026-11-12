@@ -96,3 +96,11 @@ test('the service worker caches entry.js under a new cache name', () => {
   for (const f of shell) if (f !== './') assert.ok(existsSync(join(ROOT, f)), `${f} missing`);
   assert.match(sw, /const CACHE = 'bsa-coaches-v4';/);
 });
+
+test('the home page drops the roll call placeholder and gains no entry tile', () => {
+  const html = read('index.html');
+  assert.doesNotMatch(html, /Roll call/i);
+  assert.equal((html.match(/class="tile off"/g) || []).length, 1);
+  assert.deepEqual([...html.matchAll(/<span class="n">([^<]*)<\/span>/g)].map((m) => m[1]), ['1', '2']);
+  assert.doesNotMatch(html, /entry\.js|data-entry/);
+});
