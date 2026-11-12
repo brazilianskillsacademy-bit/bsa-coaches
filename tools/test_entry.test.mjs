@@ -8,6 +8,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
@@ -103,4 +104,20 @@ test('the home page drops the roll call placeholder and gains no entry tile', ()
   assert.equal((html.match(/class="tile off"/g) || []).length, 1);
   assert.deepEqual([...html.matchAll(/<span class="n">([^<]*)<\/span>/g)].map((m) => m[1]), ['1', '2']);
   assert.doesNotMatch(html, /entry\.js|data-entry/);
+});
+
+// The repo is public: no tracked file names the academy's own web domain (the
+// entry page's address lives only in the encrypted links), and the tile and
+// its script carry no number a PIN could hide in.
+test('no tracked file holds the academy domain and the tile holds no digit', () => {
+  const domain = ['brazilianskills', 'academy.com'].join('');
+  const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT, encoding: 'utf8' }).split('\0').filter(Boolean);
+  assert.ok(tracked.includes('entry.js') && tracked.includes('attendance.html'));
+  for (const f of tracked) {
+    assert.ok(!readFileSync(join(ROOT, f), 'latin1').toLowerCase().includes(domain), `${f} holds the academy domain`);
+  }
+  const { tiles, labels } = entryMarkup(read('attendance.html'));
+  for (const [name, text] of [['entry.js', read('entry.js')], ...tiles.map((t) => ['tile', t]), ...labels.map((l) => ['label', l])]) {
+    assert.doesNotMatch(text, /[0-9]/, `${name} holds a digit`);
+  }
 });
