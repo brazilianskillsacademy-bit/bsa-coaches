@@ -1,7 +1,7 @@
 // App shell cache so the home screen icon opens instantly. links.enc.json is
 // always fetched fresh (network first) so a changed link reaches every phone.
-const CACHE = 'bsa-coaches-v3';
-const SHELL = ['./', 'index.html', 'attendance.html', 'app.css', 'crypto.js', 'manifest.webmanifest',
+const CACHE = 'bsa-coaches-v4';
+const SHELL = ['./', 'index.html', 'attendance.html', 'app.css', 'crypto.js', 'entry.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'fonts/anton-latin.woff2', 'fonts/inter-latin.woff2'];
 

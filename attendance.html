@@ -40,6 +40,13 @@
       Always use these buttons, never a saved or downloaded copy.
     </div>
 
+    <div class="section" id="entryLabel" hidden>Arena X coaches</div>
+    <button class="tile" data-entry="entry_arenax" data-entry-label="entryLabel" type="button" hidden>
+      <span class="ico">📝</span>
+      <span class="txt"><span class="t">Attendance entry</span><span class="d">Arena X: enter who came, after your session</span></span>
+      <span class="chev">›</span>
+    </button>
+
     <div class="section">Skills</div>
     <button class="tile" data-key="sunningdale" type="button">
       <span class="ico">⚽<span class="n">1</span></span>
@@ -81,6 +88,7 @@
 <footer>Brazilian Skills Academy · Cape Town</footer>
 
 <script src="crypto.js"></script>
+<script src="entry.js"></script>
 <script>
 (function () {
   var KEY = 'bsa-coach-pw';
@@ -114,6 +122,7 @@
       }
       b.onclick = function () { window.open(url, '_blank', 'noopener'); };
     });
+    BSAEntry.show(document, links, window.open);
   }
 
   function lock(msg) {

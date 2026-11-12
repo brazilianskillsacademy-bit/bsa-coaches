@@ -28,9 +28,13 @@ function shell() {
   return [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]);
 }
 
-test('no app file references googleapis or gstatic', () => {
-  assert.ok(appFiles.includes('index.html') && appFiles.includes('app.css'));
-  for (const f of appFiles) assert.ok(!/googleapis|gstatic/.test(read(f)), `${f} still loads Google Fonts`);
+test('no app file references googleapis, gstatic or any other origin', () => {
+  assert.ok(appFiles.includes('index.html') && appFiles.includes('app.css') && appFiles.includes('entry.js'));
+  for (const f of appFiles) {
+    const text = read(f);
+    assert.ok(!/googleapis|gstatic/.test(text), `${f} still loads Google Fonts`);
+    assert.ok(!/[a-z]+:\/\/|(src|href|action)\s*=\s*["']?\/\/|url\(\s*["']?\/\//i.test(text), `${f} loads from another origin`);
+  }
 });
 
 test('app.css declares Anton and Inter from woff2 files in the repo', () => {
